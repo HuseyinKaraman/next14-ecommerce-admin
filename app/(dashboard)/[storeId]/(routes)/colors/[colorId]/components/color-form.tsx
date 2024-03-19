@@ -19,7 +19,9 @@ import { AlertModal } from "@/components/modals/alert-modal";
 
 const formSchema = z.object({
   name: z.string().min(1),
-  value: z.string().min(1),
+  value: z.string().min(4).regex(/^#/, {
+    message: "String must be valid hex code",
+  }),
 });
 
 type ColorFormValues = z.infer<typeof formSchema>;
@@ -53,7 +55,7 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
       setLoading(true);
       if (initialData) {
         await axios.patch(`/api/${params.storeId}/colors/${params.colorId}`, data);
-      }else{
+      } else {
         await axios.post(`/api/${params.storeId}/colors`, data);
       }
       router.refresh();
@@ -124,7 +126,13 @@ export const ColorForm: React.FC<ColorFormProps> = ({ initialData }) => {
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <Input placeholder="Color value" disabled={loading} {...field} />
+                    <div className="flex items-center gap-x-4">
+                      <Input placeholder="Color value" disabled={loading} {...field} />
+                      <div
+                        className="border p-4 rounded-full"
+                        style={{ backgroundColor: field.value }}
+                      />
+                    </div>
                   </FormControl>
                 </FormItem>
               )}

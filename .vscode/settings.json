@@ -1,0 +1,8 @@
+{
+    "explorer.fileNesting.enabled": false,
+    "outline.collapseItems": "alwaysExpand",
+    "debug.saveBeforeStart": "allEditorsInActiveGroup",
+    "scm.defaultViewMode": "tree",
+    "git.ignoreSubmodules": false,
+    "explorer.compactFolders": false
+}

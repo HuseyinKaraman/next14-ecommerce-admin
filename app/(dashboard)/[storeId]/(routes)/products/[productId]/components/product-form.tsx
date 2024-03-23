@@ -94,7 +94,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/products/${params.productId}`, data);
+        await axios.patch(
+          `/api/${params.storeId}/products/${params.productId}`,
+          data
+        );
       } else {
         await axios.post(`/api/${params.storeId}/products`, data);
       }
@@ -123,9 +126,6 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   };
 
-  console.log(form.getValues());
-  
-
   return (
     <>
       <AlertModal
@@ -148,7 +148,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       </div>
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full">
           <FormField
             control={form.control}
             name="images"
@@ -157,10 +159,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormLabel>Images</FormLabel>
                 <FormControl>
                   <ImageUpload
-                    value={field.value.map((image) => image.url)} 
-                    disabled={loading} 
-                    onChange={(url) => field.onChange([...field.value, { url }])}
-                    onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
+                    value={field.value.map((image) => image.url)}
+                    disabled={loading}
+                    onChange={(url) =>
+                      field.onChange([...field.value, { url }])
+                    }
+                    onRemove={(url) => {
+                      field.onChange(
+                        field.value.filter((image) => image.url !== url)
+                      );
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -175,7 +183,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Product Name" disabled={loading} {...field} />
+                    <Input
+                      placeholder="Product Name"
+                      disabled={loading}
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
@@ -299,7 +311,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Featured</FormLabel>
@@ -316,7 +331,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel>Archived</FormLabel>

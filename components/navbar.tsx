@@ -1,19 +1,20 @@
-import { UserButton, auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 
+import { redirect } from "next/navigation";
+import { currentUser } from "@/lib/auth";
 import { MainNav } from "@/components/main-nav";
 import StoreSwitcher from "@/components/store-switcher";
 import prismadb from "@/lib/prismadb";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { UserButton } from "./auth/user-button";
 
 const Navbar = async () => {
-    const { userId } = auth();
+    const user = await currentUser();
 
-    if (!userId) {
+    if (!user?.id) {
         redirect("/sign-in");
     }
 
-    const stores = await prismadb.store.findMany({ where: { userId } });
+    const stores = await prismadb.store.findMany({ where: { userId: user?.id } });
 
     return (
         <div className="border-b">
@@ -22,8 +23,8 @@ const Navbar = async () => {
                 <MainNav className="mx-6" />
                 <div className="ml-auto flex items-center space-x-4">
                     <ThemeToggle />
-                    <UserButton afterSignOutUrl="/" />
                 </div>
+                <UserButton />
             </div>
         </div>
     );

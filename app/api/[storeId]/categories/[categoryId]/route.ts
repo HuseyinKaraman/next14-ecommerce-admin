@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { currentUser } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 import prismadb from "@/lib/prismadb";
@@ -35,12 +35,12 @@ export async function PATCH(
   { params }: { params: { storeId: string; categoryId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
     const body = await request.json();
 
     const { name, billboardId } = body;
     
-    if (!userId) {
+    if (!user?.id) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
@@ -59,7 +59,7 @@ export async function PATCH(
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId,
+        userId: user.id,
       },
     });
 
@@ -91,9 +91,9 @@ export async function DELETE(
   { params }: { params: { storeId: string; categoryId: string } }
 ) {
   try {
-    const { userId } = auth();
+    const user = await currentUser();
 
-    if (!userId) {
+    if (!user?.id) {
       return new NextResponse("Unauthenticated", { status: 401 });
     }
 
@@ -104,7 +104,7 @@ export async function DELETE(
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
-        userId,
+        userId: user.id,
       },
     });
 
